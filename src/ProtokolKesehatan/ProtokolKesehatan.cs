@@ -6,22 +6,33 @@ using System.Collections;
 using SvgNet.Types;
 using System.Runtime;
 
-public class DistancePlease : Bot
+// ------------------------------------------------------------------
+// ProtokolKesehatan
+// ------------------------------------------------------------------
+// ProtokolKesehatan adalah bot yang dirancang untuk Robocode Tank Royale dengan strategi berbasis algoritma greedy 
+// yang fokus pada penjagaan jarak dari musuh. Bot ini selalu bergerak menuju posisi di arena yang memiliki risiko 
+// minimum, mencerminkan prinsip menjaga jarak dari keramaian—seperti protokol kesehatan di dunia nyata yang 
+// menekankan social distancing.
+
+// Pada setiap langkah, ProtokolKesehatan mengevaluasi 200 posisi di sekitar lokasinya saat ini. 
+// Bot ini menghitung risiko setiap posisi berdasarkan kedekatan dan jumlah bot lain di sekitarnya, 
+// lalu memilih untuk bergerak ke posisi dengan risiko paling rendah.
+// ------------------------------------------------------------------
+
+public class ProtokolKesehatan : Bot
 {
-    // State
+    // Inisialisasi variabel
     private Hashtable enemies = new Hashtable();
-    private microEnemy target;
+    private EnemyData target;
     private Vector2D nextDestination;
     private Vector2D lastPosition;
-    private Vector2D myPos;
+    private Vector2D currentPosition;
     private double myEnergy;
     private Random random = new Random();
     private double delta = 0;
-    // Initializing variables
-
     
     // Constructor
-    public DistancePlease() : base(BotInfo.FromFile("DistancePlease.json")) { }
+    public ProtokolKesehatan() : base(BotInfo.FromFile("ProtokolKesehatan.json")) { }
 
     // Main loop
     public override void Run()
@@ -35,16 +46,16 @@ public class DistancePlease : Bot
         TracksColor = Color.FromArgb(0x80, 0x80, 0x80);  // Black
         GunColor = Color.FromArgb(0x80, 0x80, 0x80);     // Black
 
-        // Set radar to continuously scan the battlefield
+        // Set radar to continuously scan the arena
         RadarTurnRate = MaxRadarTurnRate;
-        nextDestination = lastPosition = myPos = new Vector2D(X, Y);
-        target = new microEnemy();
+        nextDestination = lastPosition = currentPosition = new Vector2D(X, Y);
+        target = new EnemyData();
 
         Console.WriteLine("Run");
         // main bot activity
         while (IsRunning)
         {
-            myPos = new Vector2D(X, Y);
+            currentPosition = new Vector2D(X, Y);
             myEnergy = Energy;
 
             if (target.live && TurnNumber > 9) {
@@ -52,130 +63,117 @@ public class DistancePlease : Bot
                     DoMovement();
                     DoGun();
                 } catch (Exception ex) {
-                    Console.WriteLine("Exception in doMovementAndGun: " + ex.Message);
+                    Console.WriteLine("Exception in DoGun and DoMovement: " + ex.Message);
                 }
             }
+
             Go();
         }
     }
     
     // minor events
     public override void OnBotDeath(BotDeathEvent e) {
-        ((microEnemy)enemies[e.VictimId]).live = false;
+        ((EnemyData)enemies[e.VictimId]).live = false;
     }
 
     // scan event
     public override void OnScannedBot(ScannedBotEvent e) {
-        Console.WriteLine("Scanned bot event triggered");
-        
-        microEnemy en = (microEnemy)enemies[e.ScannedBotId];
+        EnemyData en = (EnemyData)enemies[e.ScannedBotId];
         if (en == null) {
-            Console.WriteLine("en == null -> new Enemy Entry");
-            en = new microEnemy();
+            en = new EnemyData();
             enemies[e.ScannedBotId] = en;
-
-            Console.WriteLine($"Enemy {e.ScannedBotId} updated. Enemies count: {enemies.Count}");
         }
         
         en.energy = e.Energy;
         en.live = true;
 
-        double e_distance = myPos.Distance(new Vector2D(e.X, e.Y));
+        double e_distance = currentPosition.Distance(new Vector2D(e.X, e.Y));
         en.pos = new Vector2D(e.X, e.Y);
         
-        // Now target selection is handled by UpdateTarget() in your Run loop.
-        // Target selection: choose the closest live enemy
-        if (target == null || !target.live || e_distance < myPos.Distance(target.pos)) {
+        // update target jika salah satu keadaan benar.
+        if (target == null || !target.live || e_distance < currentPosition.Distance(target.pos)) {
             target = en;
-            // Console.WriteLine($"Setting target to {e.ScannedBotId}, distance={e_distance:F1}, live={target.live}");
         }
-
-        Console.WriteLine("OnScannedBot end");
     }
 
+    // Algoritma Penembakan
     public void DoGun() {
         double distanceToTarget = DistanceTo(target.pos.X, target.pos.Y);
+
         // Gun (HeadOnTargeting)
-        // fire when gun is aligned, cooled, and energy > 1 (avoid suicide)
-        delta = NormalizeRelativeAngle(GunDirection - calcAngleDegrees(target.pos, myPos));
-
-        if(Math.Abs(delta) < 1 && GunHeat==0 && myEnergy > 1) {
-            SetFire( Math.Min(Math.Min(myEnergy/6d, 1300d/distanceToTarget), target.energy/3d) );
+        // tembak saat gun aligned, cooled, dan energy > 1
+        delta = NormalizeRelativeAngle(calcAngleDegrees(target.pos, currentPosition) - GunDirection);
+        if(Math.Abs(delta) < 5 && GunHeat==0 && myEnergy > 1) {
+            // tembak dengan damage maksimal.
+            SetFire(3);
         }
-        
-        // Console.WriteLine($"Debug: GunAngle={delta:F2}, NormalizedGunAngle={NormalizeRelativeAngle(delta)}, BearingToTarget={GunBearingTo(target.pos.X, target.pos.Y)}, target position: ({target.pos.X}, {target.pos.Y}), GunDirection={GunDirection:F2}");
 
-        SetTurnGunRight(delta);
+        // sesuaikan posisi gun (mengarah target)
+        SetTurnGunLeft(delta);
     }
 
+    // Algoritma Pergerakan
     public void DoMovement() {
-        // Move
+        // Bergerak ke Destinasi aman
         double distanceToNextDestination = DistanceTo(nextDestination.X, nextDestination.Y);
-        // search a new destination if I reached this one
+        // Mencari destinasi baru jika destinasi saat ini telah tercapai
         if(distanceToNextDestination < 15) {
             int aliveEnemies = 0;
             foreach (DictionaryEntry entry in enemies)
             {
-                microEnemy enemy = (microEnemy)entry.Value;
+                EnemyData enemy = (EnemyData)entry.Value;
                 if (enemy.live)
                 {
                     aliveEnemies++;
                 }
             }
 
+            // addLast digunakan untuk meningkatkan performa Bot di 1v1
             double addLast = 1 - Math.Round(Math.Pow(random.NextDouble(), aliveEnemies));
 
-            Rectangle2D battleField = new Rectangle2D(30, 30, ArenaWidth - 60, ArenaHeight - 60);
+            Rectangle2D safeArea = new Rectangle2D(30, 30, ArenaWidth - 60, ArenaHeight - 60);
             Vector2D testPoint;
+            // menghasilkan dan mengevaluasi 200 testPoint
             for (int i = 0; i<200; i++) {
-                testPoint = calcPoint(myPos, Math.Min(DistanceTo(target.pos.X, target.pos.Y)*0.8, 100 + 200*random.NextDouble()), 360*random.NextDouble());
+                testPoint = calcPoint(currentPosition, Math.Min(DistanceTo(target.pos.X, target.pos.Y)*0.8, 100 + 200*random.NextDouble()), 360*random.NextDouble());
 
-                if(battleField.Contains(testPoint.X, testPoint.Y) && Evaluate(testPoint, addLast) < Evaluate(nextDestination, addLast)) {
+                if(safeArea.Contains(testPoint.X, testPoint.Y) && EvaluatePosition(testPoint, addLast) < EvaluatePosition(nextDestination, addLast)) {
                     nextDestination = testPoint;
                 }
             }
-            lastPosition = myPos;
-            Console.WriteLine($"selected nextDestination: ({nextDestination.X}, {nextDestination.Y}), last position: ({lastPosition.X}, {lastPosition.Y}), distance: {distanceToNextDestination}");
-        } else {
-            double angle = calcAngleDegrees(nextDestination, myPos) - Direction;   
-            double desiredAngle = calcAngleDegrees(nextDestination, myPos);    
-            double moveDirection = 1;
-            
-            Console.WriteLine(angle);
 
+            lastPosition = currentPosition;
+
+        } else {
+            double angle = calcAngleDegrees(nextDestination, currentPosition) - Direction;     
+            double moveDirection = 1;
+
+            // untuk efisiensi pergerakan, bot dapat bergerak mundur
             if (Math.Cos(angle * Math.PI / 180) < 0) {
                 angle += 180;
                 moveDirection = -1;
-                angle = NormalizeRelativeAngle(angle);
-            } else {
-                angle = -1 * NormalizeRelativeAngle(angle);
             }
             
+            angle = NormalizeRelativeAngle(angle);
             SetForward(distanceToNextDestination * moveDirection);
-            Console.WriteLine(angle);
-            SetTurnRight(angle);
+            SetTurnLeft(angle);
             
-            // Set speed based on the actual turn angle
+            // mengatur kecepatan berdasarkan rotasi yang harus dilakukan bot
             MaxSpeed = Math.Abs(angle) > 57 ? 0 : 8;
-            
-            // Console.WriteLine($"Turn {TurnNumber}: New Direction={Direction}, DesiredAngle={desiredAngle}, RelativeAngle={angle}, TurnAngle={NormalizeRelativeAngle(angle)}, MoveDirection={moveDirection}, MaxSpeed={MaxSpeed}, Distance={distanceToNextDestination}");
-            // Console.WriteLine($"selected nextDestination: ({nextDestination.X}, {nextDestination.Y}), last position: ({lastPosition.X}, {lastPosition.Y})");
         }
 
     }
 
-    // eval position
-    // Evaluate risk for candidate position "p"
-    // currentPosWeight is a weight for penalizing staying too close to current position (optional)
-    public double Evaluate(Vector2D p, double addLast){
-        // Base risk: penalize candidate points that are too close to current position
-        // This encourages movement
+    // Evaluasi Posisi
+    // Evaluasi resiko untuk kandidat "p"
+    public double EvaluatePosition(Vector2D p, double addLast){
+        // Basis resiko: supaya merugikan kandidat posisi yang terlalu dekat dengan posisi terakhir (lastPosition)
         double eval = addLast*0.08/p.DistanceSquared(lastPosition);
         
-        // Add risk contributions from each enemy
+        // menghitung resiko berdasarkan enemy yang masih hidup (dari energi dan posisi [sudut dan jarak])
         foreach (DictionaryEntry entry in enemies) {
-            microEnemy en = (microEnemy)entry.Value;
-            double angleDiff = calcAngleDegrees(myPos, p) - calcAngleDegrees(en.pos, p);
+            EnemyData en = (EnemyData)entry.Value;
+            double angleDiff = calcAngleDegrees(currentPosition, p) - calcAngleDegrees(en.pos, p);
             if (en.live) {
                 eval += Math.Min(en.energy/myEnergy,2) * (1 + Math.Abs(Math.Cos(angleDiff * Math.PI / 180))) / p.DistanceSquared(en.pos);
             }
@@ -183,7 +181,14 @@ public class DistancePlease : Bot
         return eval;
     }
 
-    // math
+    // Class untuk membantu menyimpan data enemy atau target
+    public class EnemyData {
+        public Vector2D pos;
+        public double energy;
+        public bool live;
+    }
+
+    // HELPER FUNCTIONS
     private Vector2D calcPoint(Vector2D p, double dist, double angDegrees) {
         double angRadians = angDegrees * Math.PI / 180;
         return new Vector2D(p.X + dist * Math.Sin(angRadians), p.Y + dist * Math.Cos(angRadians));
@@ -193,15 +198,7 @@ public class DistancePlease : Bot
         return Math.Atan2(p2.Y - p1.Y, p2.X - p1.X) * 180 / Math.PI;
     }
 
-    // microEnemy
-    public class microEnemy {
-        public Vector2D pos;
-        public double energy;
-        public bool live;
-    }
-
-
-    // Helper Lightweight Data Structure
+    // HELPER LIGHTWEIGHT DATA STRUCTURE
     public struct Vector2D
     {
         public double X { get; }
@@ -218,7 +215,7 @@ public class DistancePlease : Bot
         public static Vector2D operator *(double scalar, Vector2D v) => new Vector2D(scalar * v.X, scalar * v.Y);
         public double Dot(Vector2D other) => X * other.X + Y * other.Y;
 
-        // Method to calculate the squared distance between two Vector2D points
+        // Mengkalkulasi jarak antar dua titik
         public double DistanceSquared(Vector2D other)
         {
             double deltaX = this.X - other.X;
@@ -247,24 +244,15 @@ public class DistancePlease : Bot
             Height = height;
         }
 
-        // Check if a point (x, y) is inside the rectangle
+        // Mengecek apakah poin (x,y) ada di dalam rectangle
         public bool Contains(double x, double y)
         {
             return x >= X && x <= X + Width && y >= Y && y <= Y + Height;
         }
-
-        // Check if another rectangle intersects with this one
-        public bool Intersects(Rectangle2D other)
-        {
-            return X < other.X + other.Width && X + Width > other.X &&
-                Y < other.Y + other.Height && Y + Height > other.Y;
-        }
-
-        public override string ToString() => $"Rectangle2D[X={X}, Y={Y}, W={Width}, H={Height}]";
     }
 
     static void Main(string[] args)
     {
-        new DistancePlease().Start();
+        new ProtokolKesehatan().Start();
     }
 }

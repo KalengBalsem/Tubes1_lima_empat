@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QGQBWkmx82c=",
+  "dgSpecHash": "PlW+4FIyrL4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\DistancePlease\\DistancePlease.csproj",
+  "projectFilePath": "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\ProtokolKesehatan\\ProtokolKesehatan.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\balse\\.nuget\\packages\\microsoft.build.locator\\1.7.8\\microsoft.build.locator.1.7.8.nupkg.sha512",
     "C:\\Users\\balse\\.nuget\\packages\\microsoft.extensions.configuration\\8.0.0\\microsoft.extensions.configuration.8.0.0.nupkg.sha512",

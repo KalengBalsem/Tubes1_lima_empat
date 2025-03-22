@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\DistancePlease\\DistancePlease.csproj": {}
+    "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\ProtokolKesehatan\\ProtokolKesehatan.csproj": {}
   },
   "projects": {
-    "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\DistancePlease\\DistancePlease.csproj": {
+    "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\ProtokolKesehatan\\ProtokolKesehatan.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\DistancePlease\\DistancePlease.csproj",
-        "projectName": "DistancePlease",
-        "projectPath": "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\DistancePlease\\DistancePlease.csproj",
+        "projectUniqueName": "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\ProtokolKesehatan\\ProtokolKesehatan.csproj",
+        "projectName": "ProtokolKesehatan",
+        "projectPath": "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\ProtokolKesehatan\\ProtokolKesehatan.csproj",
         "packagesPath": "C:\\Users\\balse\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\DistancePlease\\obj\\",
+        "outputPath": "C:\\Users\\balse\\Documents\\VScode\\Tubes1_Stima\\tubes1-if2211-starter-pack-1.0\\sample-bots-csharp-0.30.0\\ProtokolKesehatan\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

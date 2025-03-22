@@ -6,12 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "DistancePlease/1.0.0": {
+      "ProtokolKesehatan/1.0.0": {
         "dependencies": {
           "Robocode.TankRoyale.BotApi": "0.30.0"
         },
         "runtime": {
-          "DistancePlease.dll": {}
+          "ProtokolKesehatan.dll": {}
         }
       },
       "Microsoft.Build.Locator/1.7.8": {
@@ -227,7 +227,7 @@
     }
   },
   "libraries": {
-    "DistancePlease/1.0.0": {
+    "ProtokolKesehatan/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
