@@ -54,7 +54,7 @@ brew install dotnet@7
 ## Author
 | Nama | NIM | Kelas IF2211
 | --- | --- | --- |
-| Yosef Rafael Joshua  | 13522133 | K1 |
+| Yosef Rafael Joshua  | 13522133 | K3 |
 | Asybel B.P. Sianipar | 15223011 | K1 |
 | Ignacio Kevin Alberiann | 15223090 | K1 |
 
