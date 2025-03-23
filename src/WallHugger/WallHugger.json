@@ -1,0 +1,10 @@
+{
+  "name": "WallHugger.exe",
+  "version": "1.0",
+  "authors": ["Yosef Rafael Joshua"],
+  "description": "I hug walls",
+  "homepage": "",
+  "countryCodes": ["id"],
+  "platform": ".Net 8.0",
+  "programmingLang": "C# 10.0"
+}
