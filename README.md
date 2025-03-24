@@ -39,17 +39,6 @@ sudo apt-get update && sudo apt-get install -y dotnet-sdk-7.0
 brew install dotnet@7  
 ```
 
-## Cara Menjalankan dan Menggunakan Program
-### 1. Pastikan Java dan .NET 6.0 Sudah Terinstal
-
-### 2. Klon Repositori
-
-### 3. Jalankan GUI
-
-### 4. Memaasukkan (Build) Bot dan Memulai Permainan
-
-### Contoh Alur Eksekusi
-
 
 ## Author
 | Nama | NIM | Kelas IF2211
