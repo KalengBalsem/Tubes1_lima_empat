@@ -1,0 +1,11 @@
+{
+    "name": "SBS",
+    "version": "1.0",
+    "authors": [ "Ignacio Kevin"],
+    "description": "Shoot and Move",
+    "homepage": "«…»",
+    "countryCodes": [ "id" ],
+    "platform": "NET 6.0",
+    "programmingLang": "C#"
+  }
+  
