@@ -1,7 +1,11 @@
 {
   "name": "WallHugger.exe",
   "version": "1.0",
-  "authors": ["Yosef Rafael Joshua"],
+  "authors": [
+    "Yosef",
+    "Asybel",
+    "Ignacio"
+  ],
   "description": "I hug walls",
   "homepage": "",
   "countryCodes": ["id"],
