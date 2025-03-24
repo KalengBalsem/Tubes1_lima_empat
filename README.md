@@ -53,6 +53,25 @@ sudo apt-get update && sudo apt-get install -y dotnet-sdk-7.0
 brew install dotnet@7  
 ```
 
+## How To Run
+
+### Diasumsikan sudah  ada game engine untuk Robocode Tank Royale
+
+### Clone Repository
+
+```bash
+git clone https://github.com/KalengBalsem/Tubes1_lima_empat.git
+```
+
+### Masukkan Bot ke Game Engine
+- Buka Game Engine Robocode Tank Royale
+- Buka Menu "Config"
+- Pilih "Bot Root Directories"
+- Tambahkan direktori folder berisi bot yang ingin dimasukkan
+- Buka menu "Battle"
+- Pilih "Start Battle"
+- Tambahkan Bot ke pertandingan
+- Klik tombol "Start Battle"
 
 ## Author
 | Nama | NIM | Kelas IF2211
