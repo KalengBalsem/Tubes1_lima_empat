@@ -1,7 +1,21 @@
 # Tugas Besar 1 Strategi Algoritma 2024/2025 
 ## Pemanfaatan Algoritma Greedy dalam pembuatan bot permainan Robocode Tank Royale
+4 Alternatif Bot:
+1. ProtokolKesehatan
 
-> Deskripsi singkat tugas
+ProtokolKesehatan adalah bot yang dirancang untuk Robocode Tank Royale dengan strategi berbasis algoritma greedy yang fokus pada penjagaan jarak dari musuh. Bot ini selalu bergerak menuju posisi di arena yang memiliki risiko minimum. Risiko dikalkulasi berdasarkan berdasarkan energi, sudut, dan jarak dari musuh yang masih hidup.
+ 
+3. WallHugger.exe
+
+WallHugger.exe adalah bot permainan Robocode Tank Royale yang menerapkan strategi berupa gabungan dari dua strategi Greedy yang berbeda. Strategi Greedy yang pertama adalah nearest wall. Jadi pada awal ronde, bot akan mencari tembok yang paling dekat dengan posisinya dan bergerak ke tembok tersebut. Strategi ini bertujuan untuk menghindari daerah tengah yang cenderung ramai dan dengan bergerak ke salah satu tembok, bot tidak perlu memperhatikan musuh di belakang (karena belakangnya tembok).
+
+4. SBS
+
+SBS adalah bot yang diprogram untuk permainan Robocode Tank Royale dengan menggunakan strategi algoritma greedy yang fokus pada penyerangan efisien dan penyerangan balik ketika terserang bot lain. Pada awal ronde permainan, bot akan menghindari wilayah tengah dan segera menuju tembok/dinding batas permainan yang ditetapkan. Terdapat strategi untuk tiga kondisi utama, yaitu yang pertama adalah ketika melakukan penyerangan umum setelah memindai musuh. Strategi ini berfungsi untuk menghemat energi peluru berbasis jarak dari bot SBS ke bot musuh yang dipindai. Kondisi kedua adalah ketika terserang peluru di mana bot SBS akan menyerang balik musuh sesuai arah peluru tersebut. Kondisi ketiga adalah ketika menghantam bot musuh di mana bot SBS akan langsung menyerang maksimal pada arah bot musuh lalu menjauh.
+
+5. YangPentingNembak
+
+YangPentingNembak adalah bot yang dirancang untuk Robocode Tank Royale dengan strategi greedy algorithm yang berfokus pada penyerangan agresif dan pemindaian musuh secara maksimal. Bot ini mengutamakan tindakan instan untuk memaksimalkan damage per detik (memaksimalkan poin), seperti menembak dengan firepower maksimal (3.0) dan memutar radar 360° terus-menerus untuk mendeteksi musuh.
 
 ## Struktur Folder
 *Workspace* ini terdiri dari:  
@@ -38,17 +52,6 @@ sudo apt-get update && sudo apt-get install -y dotnet-sdk-7.0
 # macOS (Homebrew)  
 brew install dotnet@7  
 ```
-
-## Cara Menjalankan dan Menggunakan Program
-### 1. Pastikan Java dan .NET 6.0 Sudah Terinstal
-
-### 2. Klon Repositori
-
-### 3. Jalankan GUI
-
-### 4. Memaasukkan (Build) Bot dan Memulai Permainan
-
-### Contoh Alur Eksekusi
 
 
 ## Author
